@@ -28,7 +28,7 @@ export default function Comments() {
     }
 }
 test()
-    }, [])
+    }, [params.id])
 
     return (
         <>
