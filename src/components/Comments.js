@@ -7,25 +7,29 @@ export default function Comments() {
     const params = useParams();
     const [loading, setLoading] = useState(true);
     const [comments, setComments] = useState([]);
-    useEffect(async () => {
-        try {
-
-            const json = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${params.id}.json?print=pretty`)
-            const promises = json.data.kids;
-            //console.log(promises.id);
-            const showComment = promises.slice(0, 20).map(id =>
-                axios.get(`https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`).then(
-                    response => response.data
-                )
-            );
-            const result = await Promise.all(showComment);
-            setComments(result);
-            setLoading(false);
-        }
-        catch (err) {
-            console.log(err);
-        }
+    
+    useEffect( () => {
+        async function test() {
+    try {
+        const json = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${params.id}.json?print=pretty`)
+        const promises = json.data.kids;
+        //console.log(promises.id);
+        const showComment = promises.slice(0, 20).map(id =>
+            axios.get(`https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`).then(
+                response => response.data
+            )
+        );
+        const result = await Promise.all(showComment);
+        setComments(result);
+        setLoading(false);
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+test()
     }, [])
+
     return (
         <>
             {loading ? (<h1>Loading....</h1>) : (
